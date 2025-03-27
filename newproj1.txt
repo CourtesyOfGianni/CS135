@@ -1,0 +1,53 @@
+//psuedocode
+//readd csv file
+csv file has tasks for  the day we need to plan them based on time and priority 
+24hr notation
+convert to 12 hr time for task a
+
+Input time in 24-hour notation to a string variable.
+3. Extract values of hour and minute from input.
+(a) Use find method of string class to find out the index of colon (:), a character separating hour and
+minute.
+(b) Use substr method of string class to get the substring representing hour and minute.
+(c) Use stoi function to convert a string to the corresponding integers. For example, stoi("12") returns
+12.
+4. If hour is not in [0, 23] (that is, hour is smaller than 0 or hour is larger than 23) or minute is not in [0, 59],
+then print “invalid input” and return -1. The word “invalid” cannot be missed.
+5. Depending on the values of hour, print out the corresponding 12-hour notation.
+6. Here are some sample input/output.
+(a) When hour or minute is not valid.
+2
+
+Enter time (hh:mm) in 24-hour notation (for example, 12:56): 5:61
+invalid format
+
+(b) When input format is 00:mm. The highlights are input and key part of output.
+
+Enter time (hh:mm) in 24-hour notation (for example, 12:56): 00:21
+24-hour notation 00:21 in 12-hour notation is {12:21 AM}
+
+(c) When input hour is in [1, 11]. The highlights are input and key part of output.
+
+Enter time (hh:mm) in 24-hour notation (for example, 12:56): 11:05
+24-hour notation 11:05 in 12-hour notation is {11:05 AM}
+
+(d) When input format is 12:mm. The highlights are input and key part of output.
+
+Enter time (hh:mm) in 24-hour notation (for example, 12:56): 12:05
+24-hour notation 12:05 in 12-hour notation is {12:05 PM}
+
+(e) When input hour is in [13, 23]. The highlights are input and key part of output.
+
+Enter time (hh:mm) in 24-hour notation (for example, 12:56): 17:51
+24-hour notation 17:51 in 12-hour notation is {5:51 PM}
+
+
+use substr search to sperate hour and minute
+convert hours to 12 hour using?? define all hour conversion?
+minutes should be same 
+make sure time is within limites not <60 or negative
+
+
+
+
+printing out hour but not minutes? because it is a string stoi converts string to int
