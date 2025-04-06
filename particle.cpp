@@ -7,48 +7,55 @@
 #include <cmath>
 using namespace std;
 
+// Structure to store 3D coordinates
+struct Coord3D {
+    double x;
+    double y;
+    double z;
+};
+
+// Particle class to store position and velocity
 class Particle {
-    public:
-    double x;
-    double y;
-    double z;
-    double vx;
-    double vy;
-    double vz;
-};
-class Coord3D {   //class type that represents coordinates in 3D
 public:
-    double x;
-    double y;
-    double z;
+    Coord3D position;
+    Coord3D velocity;
 };
-Particle* createParticle(double x, double y, double z, double vx, double vy, double vz) {
-    Particle* coord = new Particle; 
+
+// Create a new particle with the given position and velocity
+Particle* createParticle(double x, double y, double z, 
+                         double vx, double vy, double vz) {
+    Particle* p = new Particle;
+    p->position.x = x;
+    p->position.y = y;
+    p->position.z = z;
+    p->velocity.x = vx;
+    p->velocity.y = vy;
+    p->velocity.z = vz;
+    return p;
 }
 
-void setVelocity(Particle *p, double vx, double vy, double vz){
-    p->vx = vx; // Set the velocity in the x direction
-    p->vy = vy; // Set the velocity in the y direction
-    p->vz = vz; // Set the velocity in the z direction
+// Set the velocity of the particle
+void setVelocity(Particle *p, double vx, double vy, double vz) {
+    p->velocity.x = vx;
+    p->velocity.y = vy;
+    p->velocity.z = vz;
 }
 
-Coord3D getPosition(Particle *p){
-    Coord3D position; // Create a Coord3D object to hold the position
-    position.x = p->x; // Get the x position from the particle
-    position.y = p->y; // Get the y position from the particle
-    position.z = p->z; // Get the z position from the particle
-    return position; // Return the position
+// Get the current position of the particle
+Coord3D getPosition(Particle *p) {
+    return p->position;
 }
 
-void move(Particle *p, double dt){
-    p->x = p->x * dt; //dereference ppos to get object
-    p->y = p->y *dt; //uses dot operator for pvel as well
-    p->z = p->z *dt;
+// Update the particle's position based on its velocity and elapsed time
+void move(Particle *p, double dt) {
+    p->position.x += p->velocity.x * dt;
+    p->position.y += p->velocity.y * dt;
+    p->position.z += p->velocity.z * dt;
 }
 
-void deleteParticle(Particle *p){
+// Free the memory allocated for the particle
+void deleteParticle(Particle *p) {
     delete p;
-    p = nullptr;  
 }
 
 int main() {
