@@ -18,12 +18,12 @@ public:
 double length(Coord3D *p) { // get values from Cord3D object that p points to
     double x = p->x; //p is a memory address of where 3D object is located
     double y = p->y;  //coordinates of point p
-    double z = p->z;
+    double z = p->z; //need to use arrow to access members inside the class
 
-    return sqrt(x * x + y * y + z * z);
+    return sqrt(x * x + y * y + z * z); //formula for length
 }
 //Task B
-Coord3D * fartherFromOrigin(Coord3D *p1, Coord3D *p2) {
+Coord3D * fartherFromOrigin(Coord3D *p1, Coord3D *p2) { //just comparing 2 values using length function
     if (length(p1) > length(p2)) {
         return p1;
     } else {
@@ -35,7 +35,7 @@ Coord3D * fartherFromOrigin(Coord3D *p1, Coord3D *p2) {
 void move(Coord3D *ppos, Coord3D *pvel, double dt){
     ppos->x = ppos->x + pvel->x * dt; //dereference ppos to get object
     ppos->y = ppos->y +pvel->y *dt; //uses dot operator for pvel as well
-    ppos->z = ppos->z +pvel->z *dt;
+    ppos->z = ppos->z +pvel->z *dt; //creating new position, ppos using the formula of velocity x time (dt)
 }
 //Task E
 Coord3D* createCoord3D(double x, double y, double z){ // allocate memory and initialize
