@@ -1,11 +1,5 @@
-//Gianni Russell
-//Csci 135
-//Prof Tong Yi 
-//Lab 11 Task D
-
-
-#include <string>
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Profile {
@@ -32,53 +26,56 @@ Profile::Profile(string usrn, string dspn) {
     displayname = dspn;
 }
 
- Profile::Profile() {
+Profile::Profile() {
     username = "";
     displayname = "";
- }
+}
 
 string Profile::getUsername() {
     return username;
 }
+
 string Profile::getFullName(){
     return displayname + " (@" + username + ")";
 }
+
 void Profile::setDisplayName(string dspn){
     displayname = dspn;
 }
+
 string Profile::printUsername(){
     return "\"@" + username + "\"";
 }
 
-
-class Network {
-private:
-  static const int MAX_USERS = 20; // max number of user profiles
-  int numUsers;                    // number of registered users
-  Profile profiles[MAX_USERS];     // user profiles array:
-                                   // mapping integer ID -> Profile
-  bool following[MAX_USERS][MAX_USERS];
-  // Returns user ID (index in the 'profiles' array) by their username
-  // (or -1 if username is not found)
-  int findID (string usrn);
-  static const int MAX_POSTS = 100;
-  int numPosts;                    // number of posts
-  Post posts[MAX_POSTS];           // array of all posts
-public:
-  // Constructor, makes an empty network (numUsers = 0)
-  Network();
-  // Attempts to sign up a new user with specified username and displayname
-  // return true if the operation was successful, otherwise return false
-  bool addUser(string usrn, string dspn);
-  bool follow(string usrn1, string usrn2); // new
-  void printDot();  
-  bool writePost(string usrn, string msg);
-  bool printTimeline(string usrn);
-};
-
+// New struct for posts
 struct Post{
     string username;
     string message;
+};
+
+class Network {
+private:
+    static const int MAX_USERS = 20; // max number of user profiles
+    int numUsers;                    // number of registered users
+    Profile profiles[MAX_USERS];     // user profiles array:
+                                   // mapping integer ID -> Profile
+    bool following[MAX_USERS][MAX_USERS];
+    static const int MAX_POSTS = 100;         // new
+    int numPosts;                             // new
+    Post posts[MAX_POSTS];                    // new
+    // Returns user ID (index in the 'profiles' array) by their username
+    // (or -1 if username is not found)
+    int findID (string usrn);
+public:
+    // Constructor, makes an empty network (numUsers = 0)
+    Network();
+    // Attempts to sign up a new user with specified username and displayname
+    // return true if the operation was successful, otherwise return false
+    bool addUser(string usrn, string dspn);
+    bool follow(string usrn1, string usrn2); // new
+    void printDot();  
+    bool writePost(string usrn, string msg);  // new
+    bool printTimeline(string usrn);          // new
 };
 
 int Network::findID (string usrn){
@@ -93,7 +90,7 @@ int Network::findID (string usrn){
 
 Network::Network() {
     numUsers = 0;
-    numPosts = 0;
+    numPosts = 0;  // Initialize numPosts to 0
     //initialize 2d array
     for (int i = 0; i < MAX_USERS; i++) {
         for (int j = 0; j < MAX_USERS; j++) {
@@ -101,6 +98,7 @@ Network::Network() {
         }
     }
 }
+
 bool Network::addUser(string usrn, string dspn){
     //username must contain text
     if (usrn == "") {
@@ -130,8 +128,8 @@ bool Network::follow(string usrn1, string usrn2) {
 
     //both usrns exist
     if (id1 != -1 && id2 != -1) {
-    following [id1][id2] = true;
-    return true;
+        following[id1][id2] = true;
+        return true;
     } else {
         return false; //operation not successful
     }
@@ -147,7 +145,7 @@ void Network::printDot() {
     cout << endl;
     //print all following relationships
     for(int i = 0; i < numUsers; i++) {
-        for (int j = 0; j <numUsers; j++) {
+        for (int j = 0; j < numUsers; j++) {
             if (following[i][j] == true) {
                 cout << profiles[i].printUsername() << " -> ";
                 cout << profiles[j].printUsername() << endl;
@@ -157,33 +155,45 @@ void Network::printDot() {
     cout << "}" << endl;
 }
 
+// Add a new post
 bool Network::writePost(string usrn, string msg) {
-    int id = findID(usrn);
-    if (id == -1) {
-        return false;
-    }
-    if (numPosts < MAX_POSTS) {
-        Post p;
-        p.username = usrn;
-        p.message = msg;
-        posts[numPosts] = p;
+    int userId = findID(usrn);
+    
+    // Check if user exists and posts array is not full
+    if (userId != -1 && numPosts < MAX_POSTS) {
+        // Add post to the posts array
+        posts[numPosts].username = usrn;
+        posts[numPosts].message = msg;
         numPosts++;
         return true;
-    } else {
-        return false;
     }
+    
+    return false;
 }
 
+// Print user's timeline
 bool Network::printTimeline(string usrn) {
-    int id = findID(usrn);
-    if (id == -1) {
+    int userId = findID(usrn);
+    
+    // Check if user exists
+    if (userId == -1) {
         return false;
     }
-    for (int i = 0; i < numPosts; i++) {
-        if (posts[i].username == usrn) {
-            cout << posts[i].message << endl;
+    
+    // Loop through all posts in reverse order (newest first)
+    for (int i = numPosts - 1; i >= 0; i--) {
+        Post currentPost = posts[i];
+        int postAuthorId = findID(currentPost.username);
+        
+        // Print posts by the user or by people they follow
+        if (currentPost.username == usrn || following[userId][postAuthorId]) {
+            // Get the profile of the post author to access their display name
+            Profile postAuthor = profiles[postAuthorId];
+            // Print in format: Displayname (@username): message
+            cout << postAuthor.getFullName() << ": " << currentPost.message << endl;
         }
     }
+    
     return true;
 }
 
